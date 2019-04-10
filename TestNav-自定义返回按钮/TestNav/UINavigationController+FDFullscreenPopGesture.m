@@ -88,6 +88,10 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
         Method viewWillDisappear_originalMethod = class_getInstanceMethod(self, @selector(viewWillDisappear:));
         Method viewWillDisappear_swizzledMethod = class_getInstanceMethod(self, @selector(fd_viewWillDisappear:));
         method_exchangeImplementations(viewWillDisappear_originalMethod, viewWillDisappear_swizzledMethod);
+        
+        Method viewDidAppear_originalMethod = class_getInstanceMethod(self, @selector(viewDidAppear:));
+        Method viewDidAppear_swizzledMethod = class_getInstanceMethod(self, @selector(fd_viewDidAppear:));
+        method_exchangeImplementations(viewDidAppear_originalMethod, viewDidAppear_swizzledMethod);
     });
 }
 
@@ -95,7 +99,7 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
 {
     [self fd_viewWillAppear:animated];
     
-    if (!self.fd_titleTextAttributes_before) {
+    if (!self.fd_titleTextAttributes_before && [self isKindOfClass:[UIViewController class]]) {
         self.fd_titleTextAttributes_before = self.navigationController.navigationBar.titleTextAttributes;
     }
     
@@ -104,36 +108,70 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     }
 }
 
+- (void)fd_viewDidAppear:(BOOL)animated
+{
+    [self fd_viewDidAppear:animated];
+    // 第一种方法 在 fd_viewDidAppear 重新设置回
+    // 第二种方法 在 fd_setupViewControllerBasedNavigationBarAppearanceIfNeeded 里面做延时
+//    UIViewController *vc = self.navigationController.viewControllers.lastObject;
+//
+//    NSLog(@"lastObject = %@, self = %@", vc, self);
+//
+    if (self.fd_titleTextAttributes_after) { // 如果是自定义返回按钮 也可以不用 写这一段 , 非自定义按钮这一段一定要有（回一个放大缩小的情况）
+
+        [self.navigationController.navigationBar setTitleTextAttributes:self.fd_titleTextAttributes_after];
+        UIView *superView = self.navigationController.navigationBar.superview;
+        [self.navigationController.navigationBar removeFromSuperview];
+        [superView addSubview:self.navigationController.navigationBar];
+    }
+    
+}
+
 - (void)fd_viewWillDisappear:(BOOL)animated
 {
     // Forward to primary implementation.
     [self fd_viewWillDisappear:animated];
-    
+
+
+
     NSArray *viewControllers = self.navigationController.viewControllers;
     /// 理财农场默认属标题属性
     NSDictionary *defultAttributeDict = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:17], NSFontAttributeName, nil];
-    
+
     if (viewControllers.count > 1 && [viewControllers objectAtIndex:viewControllers.count-2] == self) {//push 设置下一页面
-        
-                if ( self.fd_titleTextAttributes_before) {
-                    defultAttributeDict = self.fd_titleTextAttributes_before;
-                }
-        
+
+//                if ( self.fd_titleTextAttributes_before) {
+//                    defultAttributeDict = self.fd_titleTextAttributes_before;
+//                }
+
+//         [self.navigationController.navigationBar setTitleTextAttributes:defultAttributeDict];
+
     } else if ([viewControllers indexOfObject:self] == NSNotFound) { //pop 设置上一个面
-        
+
         UIViewController *viewController = self.navigationController.viewControllers.lastObject;
         NSLog(@"%@",viewController.fd_titleTextAttributes_after);
         if (viewController.fd_titleTextAttributes_after) {
             defultAttributeDict = viewController.fd_titleTextAttributes_after;
         }
+
+         [viewController.navigationController.navigationBar setTitleTextAttributes:defultAttributeDict];
+        
+        UIView *superView = viewController.navigationController.navigationBar.superview;
+        [viewController.navigationController.navigationBar removeFromSuperview];
+        [superView addSubview:viewController.navigationController.navigationBar];
+    } else {
+
+
+            [self.navigationController.navigationBar setTitleTextAttributes:defultAttributeDict];
+
     }
-    [self.navigationController.navigationBar setTitleTextAttributes:defultAttributeDict];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         UIViewController *viewController = self.navigationController.viewControllers.lastObject;
         if (viewController && !viewController.fd_prefersNavigationBarHidden) {
             [self.navigationController setNavigationBarHidden:NO animated:NO];
         }
+        
     });
 }
 
@@ -232,7 +270,23 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
                 if (viewController.fd_njq_navTitleFont) {
                     [attributeDict setValue:viewController.fd_njq_navTitleFont forKey:NSFontAttributeName];
                 }
-                [strongSelf.navigationBar setTitleTextAttributes:attributeDict];
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    
+                    NSLog(@"11111 = %d", [[self.navigationController valueForKey:@"_isTransitioning"] boolValue]);
+                    [strongSelf.navigationBar setTitleTextAttributes:attributeDict];
+                    
+                    UIView *superView = strongSelf.navigationBar.superview;
+                    UINavigationBar *navbar = strongSelf.navigationBar;
+                    [strongSelf.navigationBar removeFromSuperview];
+                    [superView addSubview:navbar];
+                });
+                //                [strongSelf.navigationBar setNeedsDisplay];
+                //
+                //                for (UIView *v in self.navigationBar.subviews) {
+                //                    [v setNeedsDisplay];
+                //                }
+                //                    [[UINavigationBar appearance]  setTitleTextAttributes:attributeDict];
             }
         }
     };

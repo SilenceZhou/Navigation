@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  TestVC3.h
 //  TestNav
 //
 //  Created by zhouyun on 2019/4/10.
@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseVc.h"
 
-@interface ViewController : UIViewController
+NS_ASSUME_NONNULL_BEGIN
 
+@interface TestVC3 : BaseVc
 
 @end
 
+NS_ASSUME_NONNULL_END

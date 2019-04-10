@@ -18,6 +18,7 @@
 		21B7AE52225DEA87001FBAE2 /* TestVC2.m in Sources */ = {isa = PBXBuildFile; fileRef = 21B7AE51225DEA87001FBAE2 /* TestVC2.m */; };
 		21B7AE55225DEA93001FBAE2 /* TestVC3.m in Sources */ = {isa = PBXBuildFile; fileRef = 21B7AE54225DEA93001FBAE2 /* TestVC3.m */; };
 		21B7AE58225DEC37001FBAE2 /* UINavigationController+FDFullscreenPopGesture.m in Sources */ = {isa = PBXBuildFile; fileRef = 21B7AE56225DEC37001FBAE2 /* UINavigationController+FDFullscreenPopGesture.m */; };
+		B6205551225E51CF0036CB76 /* BaseVc.m in Sources */ = {isa = PBXBuildFile; fileRef = B6205550225E51CF0036CB76 /* BaseVc.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,8 @@
 		21B7AE54225DEA93001FBAE2 /* TestVC3.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestVC3.m; sourceTree = "<group>"; };
 		21B7AE56225DEC37001FBAE2 /* UINavigationController+FDFullscreenPopGesture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+FDFullscreenPopGesture.m"; sourceTree = "<group>"; };
 		21B7AE57225DEC37001FBAE2 /* UINavigationController+FDFullscreenPopGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+FDFullscreenPopGesture.h"; sourceTree = "<group>"; };
+		B620554F225E51CF0036CB76 /* BaseVc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseVc.h; sourceTree = "<group>"; };
+		B6205550225E51CF0036CB76 /* BaseVc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseVc.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,8 @@
 				21B7AE51225DEA87001FBAE2 /* TestVC2.m */,
 				21B7AE53225DEA93001FBAE2 /* TestVC3.h */,
 				21B7AE54225DEA93001FBAE2 /* TestVC3.m */,
+				B620554F225E51CF0036CB76 /* BaseVc.h */,
+				B6205550225E51CF0036CB76 /* BaseVc.m */,
 				21B7AE20225DEA64001FBAE2 /* Main.storyboard */,
 				21B7AE23225DEA65001FBAE2 /* Assets.xcassets */,
 				21B7AE25225DEA65001FBAE2 /* LaunchScreen.storyboard */,
@@ -280,6 +285,7 @@
 				21B7AE58225DEC37001FBAE2 /* UINavigationController+FDFullscreenPopGesture.m in Sources */,
 				21B7AE55225DEA93001FBAE2 /* TestVC3.m in Sources */,
 				21B7AE52225DEA87001FBAE2 /* TestVC2.m in Sources */,
+				B6205551225E51CF0036CB76 /* BaseVc.m in Sources */,
 				21B7AE1F225DEA64001FBAE2 /* ViewController.m in Sources */,
 				21B7AE2A225DEA65001FBAE2 /* main.m in Sources */,
 				21B7AE1C225DEA64001FBAE2 /* AppDelegate.m in Sources */,
@@ -456,6 +462,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V2Y42S7W86;
 				INFOPLIST_FILE = TestNav/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -473,6 +480,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V2Y42S7W86;
 				INFOPLIST_FILE = TestNav/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
