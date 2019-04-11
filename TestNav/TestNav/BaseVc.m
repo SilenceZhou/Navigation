@@ -19,9 +19,9 @@
 - (void)setIsHiddenNavbarLine:(BOOL)isHiddenNavbarLine {
     
     if (isHiddenNavbarLine) {
-        self.fd_njq_navlineColor = [UIColor clearColor];
+        self.fd_navlineColor = [UIColor clearColor];
     }else {
-        self.fd_njq_navlineColor = [UIColor colorWithRed:233.0f / 255.0f green:234.0f / 255.0f blue:238.0f / 255.0f alpha:1.0f];
+        self.fd_navlineColor = [UIColor colorWithRed:233.0f / 255.0f green:234.0f / 255.0f blue:238.0f / 255.0f alpha:1.0f];
     }
     
 }

@@ -236,23 +236,23 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
             [strongSelf setNavigationBarHidden:viewController.fd_prefersNavigationBarHidden animated:animated];
             
             // 默认为白色
-            UIImage *image = [UIColor createImageWithColor:viewController.fd_njq_navbgColor?:[UIColor whiteColor]];
+            UIImage *image = [UIColor createImageWithColor:viewController.fd_navbgColor?:[UIColor whiteColor]];
             [strongSelf.navigationBar setBackgroundImage:image
                                            forBarMetrics:UIBarMetricsDefault];
             
-            strongSelf.fd_njq_navlineView.backgroundColor = viewController.fd_njq_navlineColor;
+            strongSelf.fd_navBottomLineView.backgroundColor = viewController.fd_navlineColor;
             
             // 导航标题 color 和 font
-            if ( viewController.fd_njq_navTitleColor ||  viewController.fd_njq_navTitleFont) {
+            if ( viewController.fd_navTitleColor ||  viewController.fd_navTitleFont) {
                 
                 NSMutableDictionary *attributeDict = [NSMutableDictionary dictionary];
                 
-                if ( viewController.fd_njq_navTitleColor) {
-                    [attributeDict setValue:viewController.fd_njq_navTitleColor forKey:NSForegroundColorAttributeName];
+                if ( viewController.fd_navTitleColor) {
+                    [attributeDict setValue:viewController.fd_navTitleColor forKey:NSForegroundColorAttributeName];
                 }
                 
-                if (viewController.fd_njq_navTitleFont) {
-                    [attributeDict setValue:viewController.fd_njq_navTitleFont forKey:NSFontAttributeName];
+                if (viewController.fd_navTitleFont) {
+                    [attributeDict setValue:viewController.fd_navTitleFont forKey:NSFontAttributeName];
                 }
                 
                 [strongSelf.navigationBar setTitleTextAttributes:attributeDict];
@@ -271,7 +271,7 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     }
 }
 
-- (void)njq_addViewController:(UIViewController *)ctrl {
+- (void)addViewController:(UIViewController *)ctrl {
     
     NSMutableArray *marr = [[NSMutableArray alloc]initWithArray:self.viewControllers];
     
@@ -283,7 +283,7 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     
 }
 
-- (void)njq_installViewController:(UIViewController *)ctrl atIndex:(NSInteger)atIndex {
+- (void)installViewController:(UIViewController *)ctrl atIndex:(NSInteger)atIndex {
     
     NSMutableArray *marr = [[NSMutableArray alloc]initWithArray:self.viewControllers];
     
@@ -345,14 +345,14 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     objc_setAssociatedObject(self, key, @(enabled), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (UIView *)fd_njq_navlineView {
+- (UIView *)fd_navBottomLineView {
     
     UIView * lineView = objc_getAssociatedObject(self, _cmd);
     if (!lineView) {
         lineView = [[UIView alloc]initWithFrame:CGRectMake(0, self.navigationBar.bounds.size.height - 0.5 * [UIScreen mainScreen].nativeScale * 0.5,
                                                            self.navigationBar.bounds.size.width, 0.5 * [UIScreen mainScreen].nativeScale * 0.5)];
         lineView.backgroundColor = [UIColor blackColor];
-        objc_setAssociatedObject(self, @selector(fd_njq_navlineView), lineView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, @selector(fd_navBottomLineView), lineView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self.navigationBar addSubview:lineView];
         // 隐藏系统导航
         [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
@@ -361,9 +361,9 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     
     return lineView;
 }
-- (void)setFd_njq_navlineView:(UIView *)fd_njq_navlineView {
+- (void)setFd_navBottomLineView:(UIView *)fd_navBottomLineView {
     
-    objc_setAssociatedObject(self, @selector(fd_njq_navlineView), fd_njq_navlineView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(fd_navBottomLineView), fd_navBottomLineView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 
@@ -391,14 +391,14 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     objc_setAssociatedObject(self, @selector(fd_prefersNavigationBarHidden), @(hidden), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (UIColor *)fd_njq_navbgColor{
+- (UIColor *)fd_navbgColor{
     
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (void)setFd_njq_navbgColor:(UIColor *)fd_njq_navbgColor
+- (void)setFd_navbgColor:(UIColor *)fd_navbgColor
 {
-    UIImage *image = [UIColor createImageWithColor:fd_njq_navbgColor];
+    UIImage *image = [UIColor createImageWithColor:fd_navbgColor];
     
     if (self.navigationController) {
         [self.navigationController.navigationBar setBackgroundImage:image
@@ -406,72 +406,72 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
         
         // 参考链接：https://blog.csdn.net/quanqinyang/article/details/46898797
         // navigationBar调用setBackgroundImage:方法后，布局上移了64个像素,edgesForExtendedLayout为none可以进行修复
-        if (fd_njq_navbgColor) {
+        if (fd_navbgColor) {
             self.edgesForExtendedLayout = UIRectEdgeNone;
         }
     }
     
-    objc_setAssociatedObject(self, @selector(fd_njq_navbgColor), fd_njq_navbgColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(fd_navbgColor), fd_navbgColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-/// fd_njq_navlineColor
-- (UIColor *)fd_njq_navlineColor {
+/// fd_navlineColor
+- (UIColor *)fd_navlineColor {
     return objc_getAssociatedObject(self, _cmd);
 }
-- (void)setFd_njq_navlineColor:(UIColor *)fd_njq_navlineColor {
+- (void)setFd_navlineColor:(UIColor *)fd_navlineColor {
     
     if (self.navigationController) {
-        self.navigationController.fd_njq_navlineView.backgroundColor = fd_njq_navlineColor;
+        self.navigationController.fd_navBottomLineView.backgroundColor = fd_navlineColor;
     }
     
-    objc_setAssociatedObject(self, @selector(fd_njq_navlineColor), fd_njq_navlineColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(fd_navlineColor), fd_navlineColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 
-/// fd_njq_navTitleColor
-- (UIColor *)fd_njq_navTitleColor{
+/// fd_navTitleColor
+- (UIColor *)fd_navTitleColor{
     
     return objc_getAssociatedObject(self, _cmd);
 }
-- (void)setFd_njq_navTitleColor:(UIColor *)fd_njq_navTitleColor {
-    
-    if (self.navigationController) {
-        
-        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:self.navigationController.navigationBar.titleTextAttributes];
-        [dict setObject:fd_njq_navTitleColor forKey:NSForegroundColorAttributeName];
-        [self.navigationController.navigationBar setTitleTextAttributes:dict];
-        
-        if (self.fd_titleTextAttributes_after) {
-            [self.fd_titleTextAttributes_after setValue:fd_njq_navTitleColor forKey:NSForegroundColorAttributeName];
-        } else {
-            self.fd_titleTextAttributes_after = [NSMutableDictionary dictionaryWithDictionary:self.navigationController.navigationBar.titleTextAttributes];
-        }
-    }
-    objc_setAssociatedObject(self, @selector(fd_njq_navTitleColor), fd_njq_navTitleColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-
-// fd_njq_navTitleFont
-- (UIFont *)fd_njq_navTitleFont{
-    
-    return objc_getAssociatedObject(self, _cmd);
-}
-
-- (void)setFd_njq_navTitleFont:(UIFont *)fd_njq_navTitleFont {
+- (void)setFd_navTitleColor:(UIColor *)fd_navTitleColor {
     
     if (self.navigationController) {
         
         NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:self.navigationController.navigationBar.titleTextAttributes];
-        [dict setObject:fd_njq_navTitleFont forKey:NSFontAttributeName];
+        [dict setObject:fd_navTitleColor forKey:NSForegroundColorAttributeName];
         [self.navigationController.navigationBar setTitleTextAttributes:dict];
         
         if (self.fd_titleTextAttributes_after) {
-            [self.fd_titleTextAttributes_after setValue:fd_njq_navTitleFont forKey:NSFontAttributeName];
+            [self.fd_titleTextAttributes_after setValue:fd_navTitleColor forKey:NSForegroundColorAttributeName];
         } else {
             self.fd_titleTextAttributes_after = [NSMutableDictionary dictionaryWithDictionary:self.navigationController.navigationBar.titleTextAttributes];
         }
     }
-    objc_setAssociatedObject(self, @selector(fd_njq_navTitleFont), fd_njq_navTitleFont, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(fd_navTitleColor), fd_navTitleColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+
+// fd_navTitleFont
+- (UIFont *)fd_navTitleFont{
+    
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setFd_navTitleFont:(UIFont *)fd_navTitleFont {
+    
+    if (self.navigationController) {
+        
+        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:self.navigationController.navigationBar.titleTextAttributes];
+        [dict setObject:fd_navTitleFont forKey:NSFontAttributeName];
+        [self.navigationController.navigationBar setTitleTextAttributes:dict];
+        
+        if (self.fd_titleTextAttributes_after) {
+            [self.fd_titleTextAttributes_after setValue:fd_navTitleFont forKey:NSFontAttributeName];
+        } else {
+            self.fd_titleTextAttributes_after = [NSMutableDictionary dictionaryWithDictionary:self.navigationController.navigationBar.titleTextAttributes];
+        }
+    }
+    objc_setAssociatedObject(self, @selector(fd_navTitleFont), fd_navTitleFont, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 /// 标题属性更改之前

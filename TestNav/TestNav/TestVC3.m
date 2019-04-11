@@ -21,8 +21,8 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.title = @"第三页";
-    self.fd_njq_navTitleFont = [UIFont systemFontOfSize:20];
-    self.fd_njq_navTitleColor = [UIColor blueColor];
+    self.fd_navTitleFont = [UIFont systemFontOfSize:20];
+    self.fd_navTitleColor = [UIColor blueColor];
 }
 
 /*

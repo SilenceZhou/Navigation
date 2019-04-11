@@ -40,12 +40,12 @@
 @property (nonatomic, assign) BOOL fd_viewControllerBasedNavigationBarAppearanceEnabled;
 
 
-@property (nonatomic, strong) UIView *fd_njq_navlineView;/**< 导航条下划线 */
+@property (nonatomic, strong) UIView *fd_navBottomLineView;/**< 导航条下划线 */
 
 //在navigation最后面添加viewcontroller
-- (void)njq_addViewController:(UIViewController *)ctrl;
+- (void)addViewController:(UIViewController *)ctrl;
 //在navigation指定位置插入viewcontroller.如果超过数组界限.就插入最后面
-- (void)njq_installViewController:(UIViewController *)ctrl atIndex:(NSInteger)atIndex;
+- (void)installViewController:(UIViewController *)ctrl atIndex:(NSInteger)atIndex;
 
 
 
@@ -70,13 +70,13 @@
 @property (nonatomic, assign) CGFloat fd_interactivePopMaxAllowedInitialDistanceToLeftEdge;
 
 
-@property (nonatomic, strong)  UIColor *fd_njq_navbgColor;/**< 导航条颜色 */
+@property (nonatomic, strong)  UIColor *fd_navbgColor;/**< 导航条背景色 */
 
-@property (nonatomic, strong)  UIColor *fd_njq_navlineColor; /**< 导航条下划线颜色 */
+@property (nonatomic, strong)  UIColor *fd_navlineColor; /**< 导航条下划线颜色 */
 
 #pragma mark - 导航标题颜色与字体
-@property (nonatomic, strong) UIColor *fd_njq_navTitleColor; /**< 标题颜色 */
-@property (nonatomic, strong) UIFont *fd_njq_navTitleFont;   /**< 标题字体 */
+@property (nonatomic, strong) UIColor *fd_navTitleColor; /**< 标题颜色 */
+@property (nonatomic, strong) UIFont *fd_navTitleFont;   /**< 标题字体 */
 @property (nonatomic, strong) NSDictionary<NSAttributedStringKey, id> *fd_titleTextAttributes_before; /**< 标题属性更改之前（不在外面更改这个属性） */
 @property (nonatomic, strong) NSDictionary<NSAttributedStringKey, id> *fd_titleTextAttributes_after; /**< 标题属性更改之后 （不在外面更改这个属性）*/
 

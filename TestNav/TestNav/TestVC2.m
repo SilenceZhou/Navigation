@@ -22,17 +22,17 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"第二页";
     
-    self.fd_njq_navTitleFont = [UIFont systemFontOfSize:26];
-    self.fd_njq_navTitleColor = [UIColor brownColor];
+    self.fd_navTitleFont = [UIFont systemFontOfSize:26];
+    self.fd_navTitleColor = [UIColor brownColor];
     
     // 不要用这种写法
-    // self.fd_njq_navbgColor = [[UIColor greenColor] colorWithAlphaComponent:0.1];
+    // self.fd_navbgColor = [[UIColor greenColor] colorWithAlphaComponent:0.1];
 
     // 设置导航背景色
-    self.fd_njq_navbgColor = [UIColor colorWithHexString:@"#98F5FF" alpha:0.8];
+    self.fd_navbgColor = [UIColor colorWithHexString:@"#98F5FF" alpha:0.8];
     
     // 设置导航分割线的颜色
-        self.fd_njq_navlineColor = [UIColor redColor];
+        self.fd_navlineColor = [UIColor redColor];
     // 隐藏分割线
     // self.isHiddenNavbarLine = YES;
     

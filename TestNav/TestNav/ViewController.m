@@ -21,8 +21,8 @@
     // Do any additional setup after loading the view.
     self.title = @"第一页";
     self.view.backgroundColor = [UIColor whiteColor];
-    self.fd_njq_navTitleFont = [UIFont systemFontOfSize:12];
-    self.fd_njq_navTitleColor = [UIColor blackColor];
+    self.fd_navTitleFont = [UIFont systemFontOfSize:12];
+    self.fd_navTitleColor = [UIColor blackColor];
     
     //充值导航
     UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(100, 100, 200, 100)];
@@ -38,9 +38,9 @@
 
 - (void)btnClick
 {
-////    [self.fd_titleTextAttributes_after setValue:fd_njq_navTitleFont forKey:NSFontAttributeName];
-////    [self.fd_titleTextAttributes_after setValue:fd_njq_navTitleColor forKey:NSForegroundColorAttributeName];
-//    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName : self.fd_njq_navTitleFont, NSForegroundColorAttributeName : self.fd_njq_navTitleColor}];
+////    [self.fd_titleTextAttributes_after setValue:fd_navTitleFont forKey:NSFontAttributeName];
+////    [self.fd_titleTextAttributes_after setValue:fd_navTitleColor forKey:NSForegroundColorAttributeName];
+//    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName : self.fd_navTitleFont, NSForegroundColorAttributeName : self.fd_navTitleColor}];
 //    UIView *superView = self.navigationController.navigationBar.superview;
 //    [self.navigationController.navigationBar removeFromSuperview];
 //    [superView addSubview:self.navigationController.navigationBar];
