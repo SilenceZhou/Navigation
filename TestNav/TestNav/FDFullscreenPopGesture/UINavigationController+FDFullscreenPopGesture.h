@@ -72,7 +72,7 @@
 
 @property (nonatomic, strong)  UIColor *fd_njq_navbgColor;/**< 导航条颜色 */
 
-@property (nonatomic, strong)  UIColor *fd_njq_navlineColor;/**< 导航条下划线颜色 */
+@property (nonatomic, strong)  UIColor *fd_njq_navlineColor; /**< 导航条下划线颜色 */
 
 #pragma mark - 导航标题颜色与字体
 @property (nonatomic, strong) UIColor *fd_njq_navTitleColor; /**< 标题颜色 */

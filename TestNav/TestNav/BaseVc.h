@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface BaseVc : UIViewController
 
+@property (nonatomic, assign) BOOL isHiddenNavbarLine;/**< 是否隐藏分割线 */
 @end
 
 NS_ASSUME_NONNULL_END

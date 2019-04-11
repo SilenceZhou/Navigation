@@ -22,6 +22,7 @@
 
 #import "UINavigationController+FDFullscreenPopGesture.h"
 #import <objc/runtime.h>
+#import "UIColor+convenient.h"
 
 @interface _FDFullscreenPopGestureRecognizerDelegate : NSObject <UIGestureRecognizerDelegate>
 
@@ -111,14 +112,10 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
 - (void)fd_viewDidAppear:(BOOL)animated
 {
     [self fd_viewDidAppear:animated];
-    // 第一种方法 在 fd_viewDidAppear 重新设置回
-    // 第二种方法 在 fd_setupViewControllerBasedNavigationBarAppearanceIfNeeded 里面做延时
-//    UIViewController *vc = self.navigationController.viewControllers.lastObject;
-//
-//    NSLog(@"lastObject = %@, self = %@", vc, self);
-//
-    if (self.fd_titleTextAttributes_after) { // 如果是自定义返回按钮 也可以不用 写这一段 , 非自定义按钮这一段一定要有（回一个放大缩小的情况）
-
+    
+    /// 使用自定义返回按钮可不用写这一段
+    /// 使用系统返回按钮这一段一定要有（但是会有延时）
+    if (self.fd_titleTextAttributes_after && self.navigationController.navigationBar) {
         [self.navigationController.navigationBar setTitleTextAttributes:self.fd_titleTextAttributes_after];
         UIView *superView = self.navigationController.navigationBar.superview;
         [self.navigationController.navigationBar removeFromSuperview];
@@ -131,40 +128,24 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
 {
     // Forward to primary implementation.
     [self fd_viewWillDisappear:animated];
-
-
-
+    
+    
+    /// 导航标题默认属标题属性
+    NSDictionary *defultAttributeDict = @{NSForegroundColorAttributeName : [UIColor blackColor], NSFontAttributeName : [UIFont systemFontOfSize:17]};
+    
     NSArray *viewControllers = self.navigationController.viewControllers;
-    /// 理财农场默认属标题属性
-    NSDictionary *defultAttributeDict = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:17], NSFontAttributeName, nil];
-
+    
     if (viewControllers.count > 1 && [viewControllers objectAtIndex:viewControllers.count-2] == self) {//push 设置下一页面
-
-//                if ( self.fd_titleTextAttributes_before) {
-//                    defultAttributeDict = self.fd_titleTextAttributes_before;
-//                }
-
-//         [self.navigationController.navigationBar setTitleTextAttributes:defultAttributeDict];
-
+        // 没有设置则用默认的
     } else if ([viewControllers indexOfObject:self] == NSNotFound) { //pop 设置上一个面
-
+        
         UIViewController *viewController = self.navigationController.viewControllers.lastObject;
-        NSLog(@"%@",viewController.fd_titleTextAttributes_after);
         if (viewController.fd_titleTextAttributes_after) {
             defultAttributeDict = viewController.fd_titleTextAttributes_after;
         }
-
-         [viewController.navigationController.navigationBar setTitleTextAttributes:defultAttributeDict];
-        
-        UIView *superView = viewController.navigationController.navigationBar.superview;
-        [viewController.navigationController.navigationBar removeFromSuperview];
-        [superView addSubview:viewController.navigationController.navigationBar];
-    } else {
-
-
-            [self.navigationController.navigationBar setTitleTextAttributes:defultAttributeDict];
-
     }
+    [self.navigationController.navigationBar setTitleTextAttributes:defultAttributeDict];
+    
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         UIViewController *viewController = self.navigationController.viewControllers.lastObject;
@@ -239,6 +220,8 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     }
 }
 
+
+
 - (void)fd_setupViewControllerBasedNavigationBarAppearanceIfNeeded:(UIViewController *)appearingViewController
 {
     if (!self.fd_viewControllerBasedNavigationBarAppearanceEnabled) {
@@ -252,13 +235,14 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
             
             [strongSelf setNavigationBarHidden:viewController.fd_prefersNavigationBarHidden animated:animated];
             
-//            UIImage *image = [UIImage createImageWithColor:viewController.fd_njq_navbgColor?:[UIColor whiteColor]];
-//            [strongSelf.navigationBar setBackgroundImage:image
-//                                           forBarMetrics:UIBarMetricsDefault];
+            // 默认为白色
+            UIImage *image = [UIColor createImageWithColor:viewController.fd_njq_navbgColor?:[UIColor whiteColor]];
+            [strongSelf.navigationBar setBackgroundImage:image
+                                           forBarMetrics:UIBarMetricsDefault];
             
             strongSelf.fd_njq_navlineView.backgroundColor = viewController.fd_njq_navlineColor;
             
-            // 导航标题 和 font
+            // 导航标题 color 和 font
             if ( viewController.fd_njq_navTitleColor ||  viewController.fd_njq_navTitleFont) {
                 
                 NSMutableDictionary *attributeDict = [NSMutableDictionary dictionary];
@@ -271,22 +255,8 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
                     [attributeDict setValue:viewController.fd_njq_navTitleFont forKey:NSFontAttributeName];
                 }
                 
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    
-                    NSLog(@"11111 = %d", [[self.navigationController valueForKey:@"_isTransitioning"] boolValue]);
-                    [strongSelf.navigationBar setTitleTextAttributes:attributeDict];
-                    
-                    UIView *superView = strongSelf.navigationBar.superview;
-                    UINavigationBar *navbar = strongSelf.navigationBar;
-                    [strongSelf.navigationBar removeFromSuperview];
-                    [superView addSubview:navbar];
-                });
-                //                [strongSelf.navigationBar setNeedsDisplay];
-                //
-                //                for (UIView *v in self.navigationBar.subviews) {
-                //                    [v setNeedsDisplay];
-                //                }
-                //                    [[UINavigationBar appearance]  setTitleTextAttributes:attributeDict];
+                [strongSelf.navigationBar setTitleTextAttributes:attributeDict];
+
             }
         }
     };
@@ -379,12 +349,13 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     
     UIView * lineView = objc_getAssociatedObject(self, _cmd);
     if (!lineView) {
-        lineView = [[UIView alloc]init];
-//        lineView = [[UIView alloc]initWithFrame:CGRectMake(0, self.navigationBar.height-kQM1PXLineViewHeight,
-//                                                           self.navigationBar.width, kQM1PXLineViewHeight)];
+        lineView = [[UIView alloc]initWithFrame:CGRectMake(0, self.navigationBar.bounds.size.height - 0.5 * [UIScreen mainScreen].nativeScale * 0.5,
+                                                           self.navigationBar.bounds.size.width, 0.5 * [UIScreen mainScreen].nativeScale * 0.5)];
         lineView.backgroundColor = [UIColor blackColor];
         objc_setAssociatedObject(self, @selector(fd_njq_navlineView), lineView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self.navigationBar addSubview:lineView];
+        // 隐藏系统导航
+        [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
     }
     
     
@@ -427,13 +398,19 @@ typedef void (^_FDViewControllerWillAppearInjectBlock)(UIViewController *viewCon
 
 - (void)setFd_njq_navbgColor:(UIColor *)fd_njq_navbgColor
 {
-//    UIImage *image = [UIImage createImageWithColor:fd_njq_navbgColor];
-    UIImage *image = [UIImage imageNamed:@""];
+    UIImage *image = [UIColor createImageWithColor:fd_njq_navbgColor];
     
     if (self.navigationController) {
         [self.navigationController.navigationBar setBackgroundImage:image
                                                       forBarMetrics:UIBarMetricsDefault];
+        
+        // 参考链接：https://blog.csdn.net/quanqinyang/article/details/46898797
+        // navigationBar调用setBackgroundImage:方法后，布局上移了64个像素,edgesForExtendedLayout为none可以进行修复
+        if (fd_njq_navbgColor) {
+            self.edgesForExtendedLayout = UIRectEdgeNone;
+        }
     }
+    
     objc_setAssociatedObject(self, @selector(fd_njq_navbgColor), fd_njq_navbgColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
